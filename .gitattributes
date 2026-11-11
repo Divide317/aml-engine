@@ -1,0 +1,4 @@
+# Keep LF line endings on every platform. Windows Git (core.autocrlf) would
+# otherwise check the fixtures out with CRLF, and a positional CSV parser
+# would then see a trailing  on the last column.
+* text=auto eol=lf

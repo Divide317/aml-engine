@@ -1,0 +1,49 @@
+# --- Datasets (never commit; download from Kaggle) ---
+data/raw/
+*.csv
+*.csv.gz
+*.zip
+*.parquet
+# ...except the tiny test fixtures, which are part of the test suite
+!tests/fixtures/
+!tests/fixtures/*.csv
+
+# --- Build output ---
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+CMakeUserPresets.json
+compile_commands.json
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.pyd
+*.exe
+
+# --- Generated reports (inspection script / benchmark output) ---
+reports/*.json
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.vs/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
