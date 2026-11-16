@@ -24,11 +24,12 @@ if(AML_SANITIZE)
   target_link_options(aml_options INTERFACE -fsanitize=address,undefined)
 endif()
 
-# The engine. Header-only for now; it becomes a STATIC library when the first
-# file lands in src/ (CSV loader, roadmap step 1).
-add_library(aml INTERFACE)
-target_include_directories(aml INTERFACE include)
-target_link_libraries(aml INTERFACE aml_options)
+# The engine: public API in include/aml/, implementation in src/.
+add_library(aml STATIC
+  src/parse.cpp
+)
+target_include_directories(aml PUBLIC include)   # users of aml see the public headers
+target_link_libraries(aml PRIVATE aml_options)   # our warning flags are not forced on users
 
 if(AML_BUILD_TESTS)
   enable_testing()
