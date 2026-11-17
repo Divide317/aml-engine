@@ -234,3 +234,18 @@ TEST_CASE("malformed input raises ParseError with the right line", "[parse][erro
                            header + "2022/09/01 00:20,10,8000A0000,11,8000B0000,1.00,US Dollar,1.00,US Dollar,ACH,2\n") == 2);
     }
 }
+
+TEST_CASE("zero-padded bank ids give the same account as unpadded ones", "[parse]") {
+    // The real HI-Small file writes banks as "010" and "03208"; Patterns.txt
+    // pads them too. A bank is a number, so "010" and "10" must be one account.
+    std::string content(kHeader);
+    content += "2022/09/01 00:20,010,8000A0000,11,8000B0000,1.00,US Dollar,1.00,US Dollar,ACH,0\n";
+    content += "2022/09/01 00:21,10,8000A0000,0011,8000B0000,1.00,US Dollar,1.00,US Dollar,ACH,0\n";
+
+    const auto p = aml::detail::parse_ibm_csv(write_temp("padded.csv", content));
+    REQUIRE(p.node_key.size() == 2);  // two accounts, not four
+    REQUIRE(p.edges[0].src == p.edges[1].src);
+    REQUIRE(p.edges[0].dst == p.edges[1].dst);
+    REQUIRE(aml::key_bank(p.node_key[p.edges[0].src]) == 10);
+    REQUIRE(aml::key_bank(p.node_key[p.edges[0].dst]) == 11);
+}
